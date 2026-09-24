@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Samuel Gonzalez's mechatronics engineering portfolio featuring embedded systems and robotics projects.">
+  <title>Samuel Gonzalez | Mechatronics Engineering</title>
+
+  <style>
+    :root {
+      --background: #0b1118;
+      --surface: #111b26;
+      --surface-light: #172432;
+      --border: #293849;
+      --text: #f3f6f9;
+      --muted: #a9b7c5;
+      --accent: #68dfc0;
+      --max-width: 1100px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--background);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(var(--max-width), calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    /* Navigation */
+
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(11, 17, 24, 0.94);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      min-height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    .logo span {
+      color: var(--accent);
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .nav-links a:hover,
+    .nav-links a:focus-visible {
+      color: var(--accent);
+    }
+
+    /* Hero */
+
+    .hero {
+      padding: 110px 0 105px;
+      background:
+        radial-gradient(circle at 80% 20%, rgba(104, 223, 192, 0.12), transparent 35%),
+        radial-gradient(circle at 10% 85%, rgba(82, 146, 214, 0.10), transparent 35%);
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      margin: 15px 0 10px;
+      font-size: clamp(48px, 8vw, 90px);
+      line-height: 1.04;
+      letter-spacing: -4px;
+    }
+
+    .hero h2 {
+      margin: 0;
+      color: #d1dde7;
+      font-size: clamp(20px, 3vw, 28px);
+      font-weight: 400;
+    }
+
+    .hero p {
+      max-width: 670px;
+      margin: 24px 0 0;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 12px 20px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .button-primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #0b1715;
+    }
+
+    .button-secondary:hover,
+    .button-secondary:focus-visible {
+      border-color: var(--accent);
+    }
+
+    /* Shared sections */
+
+    section {
+      padding: 82px 0;
+      scroll-margin-top: 85px;
+    }
+
+    .section-heading {
+      margin-bottom: 30px;
+    }
+
+    .section-heading h2 {
+      margin: 8px 0 0;
+      font-size: clamp(30px, 4vw, 42px);
+      line-height: 1.2;
+      letter-spacing: -1.5px;
+    }
+
+    .about-text {
+      max-width: 760px;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    /* Projects */
+
+    .project-list {
+      display: grid;
+      gap: 28px;
+    }
+
+    .project-card {
+      overflow: hidden;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+    }
+
+    .project-header {
+      padding: 30px 30px 20px;
+    }
+
+    .project-category {
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .project-header h3 {
+      margin: 8px 0 10px;
+      font-size: 26px;
+      line-height: 1.25;
+    }
+
+    .project-header p {
+      max-width: 850px;
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .tag {
+      padding: 5px 10px;
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      color: #c6d3dc;
+      font-size: 12px;
+    }
+
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      padding: 20px 30px 30px;
+    }
+
+    .video-grid.one-video {
+      grid-template-columns: minmax(0, 650px);
+    }
+
+    .video-item {
+      min-width: 0;
+      overflow: hidden;
+      background: var(--surface-light);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+
+    .video-item video {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: contain;
+      background: #05090d;
+    }
+
+    .video-caption {
+      padding: 12px 14px;
+      color: #d9e3eb;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    /* Skills and contact */
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 15px;
+    }
+
+    .skill-group {
+      padding: 22px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    .skill-group h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    .skill-group p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .contact-box {
+      padding: 35px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+    }
+
+    .contact-box p {
+      max-width: 660px;
+      color: var(--muted);
+    }
+
+    .contact-note {
+      margin-top: 20px;
+      color: var(--accent);
+      font-size: 14px;
+    }
+
+    footer {
+      padding: 25px 0;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 800px) {
+      .hero {
+        padding: 85px 0;
+      }
+
+      .hero h1 {
+        letter-spacing: -2px;
+      }
+
+      .video-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .skills-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 580px) {
+      .nav-inner {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+        padding: 12px 0;
+      }
+
+      .nav-links {
+        gap: 14px;
+      }
+
+      .nav-links a {
+        font-size: 12px;
+      }
+
+      section {
+        padding: 65px 0;
+      }
+
+      .project-header {
+        padding: 22px 20px 10px;
+      }
+
+      .video-grid {
+        padding: 15px 20px 22px;
+      }
+    }
+.repair-list {
+  display: grid;
+  gap: 18px;
+  padding: 0 30px 30px;
+}
+
+.repair-item {
+  overflow: hidden;
+  background: var(--surface-light);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.repair-item-content {
+  padding: 22px 22px 12px;
+}
+
+.repair-item h4 {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+
+.repair-item p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.repair-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  padding: 12px 22px 22px;
+}
+
+.repair-gallery figure {
+  min-width: 0;
+  margin: 0;
+}
+
+.repair-gallery img {
+  display: block;
+  width: 100%;
+  height: 175px;
+  object-fit: cover;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #09121b;
+}
+
+.repair-gallery figcaption {
+  padding-top: 7px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+@media (max-width: 700px) {
+  .repair-list {
+    padding: 0 20px 20px;
+  }
+
+  .repair-gallery {
+    grid-template-columns: 1fr;
+  }
+
+  .repair-gallery img {
+    height: auto;
+    max-height: 320px;
+    object-fit: contain;
+  }
+}
+.contact-links {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 25px;
+}
+
+.contact-links a {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+  padding: 18px;
+  background: var(--surface-light);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow-wrap: anywhere;
+}
+
+.contact-links a:hover,
+.contact-links a:focus-visible {
+  border-color: var(--accent);
+}
+
+.contact-links strong {
+  font-size: 13px;
+}
+
+.contact-links span {
+  color: var(--accent);
+  font-size: 14px;
+}
+
+@media (max-width: 600px) {
+  .contact-links {
+    grid-template-columns: 1fr;
+  }
+}
+  </style>
+</head>
+
+<body>
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="container nav-inner">
+      <a class="logo" href="#top" aria-label="Samuel Gonzalez, back to top">SG<span>.</span></a>
+
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="hero" id="top">
+    <div class="container">
+      <div class="eyebrow">Engineering Portfolio</div>
+      <h1>Samuel Gonzalez</h1>
+      <h2>Mechatronics Engineering Student</h2>
+
+      <p>
+        I am a Mechatronics Engineering student at Toronto Metropolitan
+        University with an interest in robotics, embedded systems,
+        electronics, and mechanical design.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button button-primary" href="#projects">View Projects</a>
+          <a class="button button-secondary"
+        href="resume.pdf"
+        target="_blank"
+        rel="noopener noreferrer">Download Resume</a>
+        <a class="button button-secondary" href="#contact">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="about">
+      <div class="container">
+        <div class="section-heading">
+          <div class="eyebrow">About</div>
+          <h2>About Me</h2>
+        </div>
+
+        <div class="about-text">
+          <p>
+            I enjoy building and testing systems that combine hardware and
+            software. My personal projects have given me experience with
+            microcontrollers, wireless communication, motor control, and
+            troubleshooting during system integration.
+          </p>
+          <p>
+            I am currently seeking opportunities to develop my engineering
+            skills through hands-on design, prototyping, and testing.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects">
+      <div class="container">
+        <div class="section-heading">
+          <div class="eyebrow">Selected Work</div>
+          <h2>Projects</h2>
+        </div>
+
+        <div class="project-list">
+
+          <!-- PROJECT 1: WIRELESS CAR -->
+          <article class="project-card">
+            <div class="project-header">
+              <div class="project-category">01 / Robotics</div>
+              <h3>Wireless ESP32 Robotic Vehicle</h3>
+              <p>
+                Built a wireless robotic vehicle controlled through two ESP32
+                microcontrollers using ESP-NOW communication. The project
+                combines embedded C/C++ programming, a handheld controller,
+                motor control, and electrical power integration. Testing
+                involved diagnosing communication and power-delivery issues.
+              </p>
+
+              <div class="tags">
+                <span class="tag">ESP32</span>
+                <span class="tag">C/C++</span>
+                <span class="tag">ESP-NOW</span>
+                <span class="tag">L298N</span>
+                <span class="tag">PlatformIO</span>
+              </div>
+            </div>
+
+            <div class="video-grid">
+              <div class="video-item">
+                <video controls playsinline preload="metadata" aria-label="Controlling the wireless robotic vehicle">
+                  <source src="media/ControllingCar.mp4" type="video/mp4">
+                  Your browser does not support this video.
+                </video>
+                <div class="video-caption">Controlling the Car</div>
+              </div>
+
+              <div class="video-item">
+                <video controls playsinline preload="metadata" aria-label="Testing the wireless controls">
+                  <source src="media/ControlTesting.mp4" type="video/mp4">
+                  Your browser does not support this video.
+                </video>
+                <div class="video-caption">Control Test</div>
+              </div>
+
+              <div class="video-item">
+                <video controls playsinline preload="metadata" aria-label="Quick driving test of the robotic vehicle">
+                  <source src="media/QuickDrivingTest.mp4" type="video/mp4">
+                  Your browser does not support this video.
+                </video>
+                <div class="video-caption">Quick Driving Test</div>
+              </div>
+            </div>
+          </article>
+
+          <!-- PROJECT 2: PROXIMITY SENSOR -->
+          <article class="project-card">
+            <div class="project-header">
+              <div class="project-category">02 / Sensors</div>
+              <h3>Proximity Sensor Demonstration</h3>
+              <p>
+                A hands-on demonstration of a proximity sensor detecting a
+                nearby object. The video shows the sensor response during
+                testing.
+              </p>
+
+              <div class="tags">
+                <span class="tag">Sensors</span>
+                <span class="tag">Electronics</span>
+                <span class="tag">Testing</span>
+              </div>
+            </div>
+
+            <div class="video-grid one-video">
+              <div class="video-item">
+                <video controls playsinline preload="metadata" aria-label="Proximity sensor demonstration">
+                  <source src="media/ProximitySensor.mp4" type="video/mp4">
+                  Your browser does not support this video.
+                </video>
+                <div class="video-caption">Proximity Sensor Test</div>
+              </div>
+            </div>
+          </article>
+          <!-- PROJECT 3: HARDWARE REPAIRS -->
+<article class="project-card">
+  <div class="project-header">
+    <div class="project-category">03 / Hardware Troubleshooting</div>
+    <h3>Device Repair Projects</h3>
+    <p>
+      Documented repairs of a Nintendo 3DS, laptop display, and speaker.
+      These projects involved disassembly, identifying or replacing
+      components, reassembly, and testing.
+    </p>
+  </div>
+
+  <div class="repair-list">
+
+    <!-- NINTENDO 3DS -->
+    <div class="repair-item">
+      <div class="repair-item-content">
+        <h4>Nintendo 3DS Screen Repair</h4>
+        <p>
+          Disassembled the device, investigated the screen issue, replaced
+          the screen, and tested the device after reassembly.
+        </p>
+      </div>
+
+      <div class="repair-gallery">
+        <figure>
+          <img src="media/3DSdisasembly.jpg"
+               alt="Nintendo 3DS during disassembly"
+               loading="lazy">
+          <figcaption>Disassembly</figcaption>
+        </figure>
+
+        <figure>
+          <img src="media/BrokenWire.jpg"
+               alt="Damaged wire found during the Nintendo 3DS repair"
+               loading="lazy">
+          <figcaption>Damaged wire</figcaption>
+        </figure>
+
+        <figure>
+          <img src="media/BrokenWireZoom.jpg"
+               alt="Close-up of the damaged wire"
+               loading="lazy">
+          <figcaption>Close-up of the wire</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <!-- LAPTOP -->
+    <div class="repair-item">
+      <div class="repair-item-content">
+        <h4>Laptop Display Repair</h4>
+        <p>
+          Investigated a laptop that powered on without showing an image.
+          Replaced the affected display cable and tested the screen after
+          reassembly.
+        </p>
+      </div>
+
+      <div class="repair-gallery">
+        <figure>
+          <img src="media/LaptopDisassembly.jpg"
+               alt="Laptop during disassembly"
+               loading="lazy">
+          <figcaption>Disassembly</figcaption>
+        </figure>
+
+        <figure>
+          <img src="media/ReplacementCord.jpg"
+               alt="Replacement laptop display cable"
+               loading="lazy">
+          <figcaption>Replacement cable</figcaption>
+        </figure>
+
+        <figure>
+          <img src="media/FixedScreen.jpg"
+               alt="Laptop screen working after the repair"
+               loading="lazy">
+          <figcaption>Working display</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <!-- SPEAKER -->
+    <div class="repair-item">
+      <div class="repair-item-content">
+        <h4>Speaker Battery Replacement</h4>
+        <p>
+          Opened the speaker, replaced its battery, reassembled the device,
+          and tested it afterward.
+        </p>
+      </div>
+
+      <div class="repair-gallery">
+        <figure>
+          <img src="media/SpeakerBattery.jpg"
+               alt="Speaker battery before replacement"
+               loading="lazy">
+          <figcaption>Original battery</figcaption>
+        </figure>
+
+        <figure>
+          <img src="media/BatteryReplacement.jpg"
+               alt="Speaker battery replacement"
+               loading="lazy">
+          <figcaption>Battery replacement</figcaption>
+        </figure>
+      </div>
+    </div>
+
+  </div>
+</article>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills">
+  <div class="container">
+    <div class="section-heading">
+      <div class="eyebrow">Technical Background</div>
+      <h2>Technical Skills</h2>
+    </div>
+
+    <div class="skills-grid">
+      <div class="skill-group">
+        <h3>Programming & Embedded Systems</h3>
+        <p>C, C++, ESP32, Arduino, PlatformIO, ESP-NOW</p>
+      </div>
+
+      <div class="skill-group">
+        <h3>Mechanical Design</h3>
+        <p>SolidWorks, CAD, engineering drawings</p>
+      </div>
+
+      <div class="skill-group">
+        <h3>Electronics & Robotics</h3>
+        <p>Motor drivers, DC motors, circuit integration, sensors</p>
+      </div>
+
+      <div class="skill-group">
+        <h3>Hardware Repair & Testing</h3>
+        <p>
+          Hardware troubleshooting, device disassembly and reassembly,
+          cable and component replacement, functional testing
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+   <section id="contact">
+  <div class="container">
+    <div class="contact-box">
+      <div class="eyebrow">Contact</div>
+      <h2>Get in Touch</h2>
+
+      <p>
+        I am interested in co-op opportunities involving mechatronics,
+        robotics, embedded systems, automation, and engineering design.
+      </p>
+
+      <div class="contact-links">
+        <a href="mailto:samuelegonzalez28@gmail.com">
+          <strong>Email</strong>
+          <span>samuelegonzalez28@gmail.com</span>
+        </a>
+
+        <a href="tel:+14379748287">
+          <strong>Phone</strong>
+          <span>(437) 974-8287</span>
+        </a>
+
+        <a href="https://www.linkedin.com/in/samuel-gonzalez-00bbb8384/"
+           target="_blank"
+           rel="noopener noreferrer">
+          <strong>LinkedIn</strong>
+          <span>View Profile ↗</span>
+        </a>
+  </main>
+
+  <footer>
+    <div class="container">
+      © 2026 Samuel Gonzalez
+    </div>
+  </footer>
+</body>
+</html>
