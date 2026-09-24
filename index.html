@@ -473,9 +473,218 @@
     grid-template-columns: 1fr;
   }
 }
+/* Photo and video pop-up */
+.repair-gallery img {
+  cursor: zoom-in;
+}
+
+.expand-video {
+  display: block;
+  width: calc(100% - 24px);
+  margin: 0 12px 12px;
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.expand-video:hover,
+.expand-video:focus-visible {
+  border-color: var(--accent);
+}
+
+.media-modal[hidden] {
+  display: none;
+}
+
+.media-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 55px 20px 25px;
+  background: rgba(0, 0, 0, 0.92);
+}
+
+.media-modal-content {
+  max-width: min(1100px, 100%);
+  max-height: 100%;
+  text-align: center;
+}
+
+.media-modal img,
+.media-modal video {
+  display: block;
+  max-width: 100%;
+  max-height: calc(100vh - 115px);
+  margin: auto;
+  object-fit: contain;
+}
+
+.media-modal video {
+  width: min(1100px, 100%);
+}
+
+.media-modal-caption {
+  margin: 12px 0 0;
+  color: white;
+  font-size: 14px;
+}
+
+.media-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  padding: 5px 12px;
+  border: 0;
+  background: transparent;
+  color: white;
+  font-size: 36px;
+  cursor: pointer;
+}
   </style>
 </head>
+<div class="media-modal" id="mediaModal" hidden
+     role="dialog" aria-modal="true" aria-label="Expanded media">
+  <button class="media-modal-close" id="closeMedia"
+          type="button" aria-label="Close expanded media">×</button>
 
+  <div class="media-modal-content" id="mediaModalContent"></div>
+</div>
+
+<script>
+  const modal = document.getElementById("mediaModal");
+  const modalContent = document.getElementById("mediaModalContent");
+  const closeButton = document.getElementById("closeMedia");
+  let previousFocus = null;
+
+  function openMedia(element, caption) {
+    previousFocus = document.activeElement;
+    modalContent.replaceChildren();
+
+    if (element.tagName === "IMG") {
+      const largeImage = document.createElement("img");
+      largeImage.src = element.currentSrc || element.src;
+      largeImage.alt = element.alt;
+      modalContent.appendChild(largeImage);
+    } else {
+      element.pause();
+
+      const largeVideo = document.createElement("video");
+      largeVideo.src = element.querySelector("source")?.src || element.src;
+      largeVideo.controls = true;
+      largeVideo.playsInline = true;
+      largeVideo.preload = "metadata";
+      modalContent.appendChild(largeVideo);
+    }
+
+    if (caption) {
+      const text = document.createElement("p");
+      text.className = "media-modal-caption";
+      text.textContent = caption;
+      modalContent.appendChild(text);
+    }
+
+    modal.hidden = false;
+    document.body.style.overflow = "hidden";
+    closeButton.focus();
+  }
+
+  function closeMedia() {
+    const video = modalContent.querySelector("video");
+    if (video) video.pause();
+
+    modal.hidden = true;
+    modalContent.replaceChildren();
+    document.body.style.overflow = "";
+    previousFocus?.focus();
+  }
+
+
+  document.querySelectorAll(".video-item video").forEach((video) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "expand-video";
+    button.textContent = "Expand video ⤢";
+
+    const caption = video.closest(".video-item")
+      ?.querySelector(".video-caption")?.textContent;
+
+    button.addEventListener("click", () => openMedia(video, caption));
+    video.insertAdjacentElement("afterend", button);
+  });
+
+  closeButton.addEventListener("click", closeMedia);
+
+  modal.addEventListener("click", (event) => {
+    if (event.target === modal) closeMedia();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !modal.hidden) closeMedia();
+  });
+</script>
+<script>
+  // Standalone photo viewer for every project photo.
+  const photoPopup = document.createElement("dialog");
+
+  photoPopup.style.cssText = `
+    position: fixed;
+    inset: 0;
+    width: min(95vw, 1200px);
+    max-width: none;
+    max-height: 95vh;
+    padding: 45px 15px 15px;
+    border: 0;
+    border-radius: 12px;
+    background: #101820;
+    color: white;
+    box-shadow: 0 20px 80px rgba(0, 0, 0, 0.7);
+  `;
+
+  photoPopup.innerHTML = `
+    <button type="button" aria-label="Close photo"
+      style="position:absolute;top:6px;right:15px;border:0;background:none;
+             color:white;font-size:34px;cursor:pointer;">&times;</button>
+    <img alt=""
+      style="display:block;max-width:100%;max-height:calc(95vh - 85px);
+             width:auto;height:auto;object-fit:contain;margin:auto;">
+    <p style="text-align:center;margin:10px 0 0;font-size:14px;"></p>
+  `;
+
+  document.body.appendChild(photoPopup);
+
+  const popupImage = photoPopup.querySelector("img");
+  const popupCaption = photoPopup.querySelector("p");
+  const popupClose = photoPopup.querySelector("button");
+
+  // Capture the click before any older photo code or surrounding link does.
+  document.addEventListener("click", (event) => {
+    const photo = event.target.closest(".project-card img");
+    if (!photo) return;
+
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
+    popupImage.src = photo.currentSrc || photo.src;
+    popupImage.alt = photo.alt || "Expanded project photo";
+    popupCaption.textContent = photo.alt || "";
+
+    if (!photoPopup.open) photoPopup.showModal();
+  }, true);
+
+  popupClose.addEventListener("click", () => photoPopup.close());
+
+  photoPopup.addEventListener("click", (event) => {
+    if (event.target === photoPopup) photoPopup.close();
+  });
+</script>
 <body>
   <nav class="site-nav" aria-label="Main navigation">
     <div class="container nav-inner">
@@ -626,7 +835,7 @@
 <article class="project-card">
   <div class="project-header">
     <div class="project-category">03 / Hardware Troubleshooting</div>
-    <h3>Device Repair Projects</h3>
+    <h3>Device Repair Projects [click on images to zoom] </h3>
     <p>
       Documented repairs of a Nintendo 3DS, laptop display, and speaker.
       These projects involved disassembly, identifying or replacing
